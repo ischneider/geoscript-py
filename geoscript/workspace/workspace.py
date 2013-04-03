@@ -72,9 +72,12 @@ class Workspace:
 
     if name in self.layers():
        fs = self._store.getFeatureSource(name)
-       return Layer(workspace=self, fs=fs)
+       return self._create_layer(fs)
   
     raise KeyError('No such layer "%s"' % name)
+
+  def _create_layer(self, fs):
+       return Layer(workspace=self, fs=fs)
 
   def create(self, name=None, fields=[('geom', geom.Geometry)], schema=None):
      """
@@ -102,9 +105,6 @@ class Workspace:
  
      if not name:
        name = schema.name if schema else Layer._newname()
-
-     if schema:
-       schema = feature.Schema(name, schema.fields)
 
      try:
        self.get(name)

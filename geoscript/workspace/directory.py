@@ -7,6 +7,7 @@ from java import io, net
 from geoscript import util
 from geoscript.workspace import Workspace
 from org.geotools.data.shapefile import ShapefileDataStoreFactory
+from geoscript.layer.shapefile import Shapefile
 
 class Directory(Workspace):
   """
@@ -19,6 +20,9 @@ class Directory(Workspace):
     dir = dir or os.getcwd()
     params = {'url': util.toURL(dir)}
     Workspace.__init__(self, ShapefileDataStoreFactory(), params)
+
+  def _create_layer(self, fs):
+    return Shapefile(None,workspace=self,fs=fs)
 
   def _format(self, layer):
     f = type(self._store.getDataStore(layer.name)).__name__[:-9]
